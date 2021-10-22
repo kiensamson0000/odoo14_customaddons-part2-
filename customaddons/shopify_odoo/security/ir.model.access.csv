@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_s_app,s_app,model_s_app,,1,1,1,1
+access_s_shop,s_shop,model_s_shop,,1,1,1,1
+access_s_sp_app,s_sp_app,model_s_sp_app,,1,1,1,1
+access_s_discount,s_discount,model_s_discount,,1,1,1,1
