@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="shop_app_view_tree" model="ir.ui.view">
+        <field name="name">shopify.app.tree</field>
+        <field name="model">shopify.app</field>
+        <field name="arch" type="xml">
+            <tree string="App">
+                <field name="api_key"/>
+                <field name="secret_key"/>
+                <field name="api_version"/>
+                <field name="app_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="shop_app_view_form" model="ir.ui.view">
+        <field name="name">shopify.app.form</field>
+        <field name="model">shopify.app</field>
+        <field name="arch" type="xml">
+            <form string="App">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="api_key"/>
+                            <field name="secret_key"/>
+                        </group>
+                        <group>
+                            <field name="api_version"/>
+                            <field name="app_name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="shop_app_action" model="ir.actions.act_window">
+        <field name="name">App</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shopify.app</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>
+                Create new item
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="shop_app_root" name="Shop App" sequence="7"/>
+    <menuitem id="shop_app" parent="shop_app_root" action="shop_app_action"/>
+
+</odoo>

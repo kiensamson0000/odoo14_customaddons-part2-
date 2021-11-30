@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_groups_can_see_report_timesheet" model="res.groups">
+            <field name="name"># Can see report timesheet</field>
+        </record>
+
+    </data>
+</odoo>

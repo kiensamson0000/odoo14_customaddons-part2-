@@ -29,6 +29,16 @@
               id="discount_shopify_menu"
               parent="shopify_odoo.menu_shopify_odoo_root"
               action="s_discount_act_window"
-              sequence="40"/>
+              sequence="50"/>
 
+    <menuitem name="Configuration"
+              id="configuration_menu"
+              parent="shopify_odoo.menu_shopify_odoo_root"
+              sequence="60"/>
+
+    <menuitem name="Data fetch log"
+              id="data_fetch_log"
+              parent="shopify_odoo.configuration_menu"
+              action="s_fetch_act_window"
+              sequence="61"/>
 </odoo>

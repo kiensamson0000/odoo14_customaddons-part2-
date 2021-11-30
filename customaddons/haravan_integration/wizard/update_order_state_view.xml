@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="update_order_state_view_form" model="ir.ui.view">
+            <field name="name">update.order.state.view.form</field>
+            <field name="model">update.order.state</field>
+            <field name="arch" type="xml">
+                <form string="Update Order State">
+                    <sheet>
+                        <group>
+                            <field name="haravan_order_id" readonly="1"/>
+                            <field name="haravan_fulfillment_status" readonly="1"/>
+                            <field name="haravan_cancel_reason"/>
+                            <field name="harvan_note_reason"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Confirm Order" name="update_confirmed_status_haravan_sales" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel Order" name="update_cancelled_status_haravan_sales" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_plan_sale" model="ir.actions.server">
+            <field name="name">Update Sendo Status</field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="binding_model_id" ref="model_sale_order"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.action_return_information_sendo_order()
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_report_timesheet,project_task_timer.report_timesheet,model_report_timesheet,res_groups_can_see_report_timesheet,1,1,1,0
+traceback_timesheet,project_task_timer.traceback_timesheet,model_traceback_timesheet,,1,1,1,1

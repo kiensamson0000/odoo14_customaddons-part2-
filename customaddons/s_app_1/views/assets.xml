@@ -1,0 +1,9 @@
+<odoo>
+    <data>
+        <template id="assets_backend" name="config_shopify_cart assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="shopify_app/static/src/js/mastershop321_script.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

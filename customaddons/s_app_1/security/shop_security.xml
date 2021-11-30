@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+
+    <record id="group_current_shop" model="res.groups">
+        <field name="name">Shopify Current Shop</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <record id="account_analytic_line_rule_billing_user" model="ir.rule">
+        <field name="name">shopify.discount.program.current.shop</field>
+        <field name="model_id" ref="shopify_app.model_shopify_discount_program"/>
+        <field name="domain_force">[('shop_id', '=', user.shop_id.id)]</field>
+        <field name="groups" eval="[(4, ref('shopify_app.group_current_shop'))]"/>
+    </record>
+
+</data>
+</odoo>

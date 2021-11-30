@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="traceback_timesheet_view_tree" model="ir.ui.view">
+            <field name="name">traceback_timesheet_view_tree</field>
+            <field name="model">traceback.timesheet</field>
+            <field name="arch" type="xml">
+                <tree string="traceback_timesheet_tree">
+                    <field name="employee_id"/>
+                    <field name="time"/>
+                    <field name="task_id"/>
+                    <field name="timesheet_id"/>
+                    <field name="log"/>
+                    <field name="description"/>
+                    <field name="start"/>
+                    <field name="end"/>
+                    <field name="unit_amount" widget="timesheet_uom"/>
+                </tree>
+            </field>
+        </record>
+        <record id="traceback_timesheet_view_form" model="ir.ui.view">
+            <field name="name">traceback_timesheet_view_form</field>
+            <field name="model">traceback.timesheet</field>
+            <field name="arch" type="xml">
+                <form string="traceback_timesheet_form">
+                    <sheet>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="time"/>
+                            <field name="task_id"/>
+                            <field name="timesheet_id"/>
+                            <field name="log"/>
+                            <field name="description"/>
+                            <field name="start"/>
+                            <field name="end"/>
+                            <field name="unit_amount" widget="timesheet_uom"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="traceback_timesheet_action" model="ir.actions.act_window">
+            <field name="name">traceback.timesheet.action</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">traceback.timesheet</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="traceback_timesheet_menu" name="Tracback Timesheet" parent="hr_timesheet.menu_timesheets_reports" action="traceback_timesheet_action" sequence="5"/>
+    </data>
+</odoo>

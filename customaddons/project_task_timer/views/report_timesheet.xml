@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_timesheet_view_tree" model="ir.ui.view">
+            <field name="name">report_timesheet_view_tree</field>
+            <field name="model">report.timesheet</field>
+            <field name="arch" type="xml">
+                <tree string="report_timesheet_tree" edit="0" create="0">
+                    <field name="user_id"/>
+                    <field name="department_id"/>
+                    <field name="date"/>
+                    <field name="timesheet_total"/>
+                    <field name="time_registered"/>
+                    <!--                    <field name="compute_percent_complete" />-->
+                    <field name="percent_complete" avg="Avg. of Percent Complete" optional="show"/>
+                </tree>
+            </field>
+        </record>
+        <record id="report_timesheet_view_form" model="ir.ui.view">
+            <field name="name">report_timesheet_view_form</field>
+            <field name="model">report.timesheet</field>
+            <field name="arch" type="xml">
+                <form string="report_timesheet_form" edit="0" create="0">
+                    <sheet>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="department_id"/>
+                            <field name="date"/>
+                            <field name="timesheet_total"/>
+                            <field name="time_registered"/>
+                            <field name="percent_complete"/>
+                            <!--                            <field name="compute_percent_complete"/>-->
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="report_timesheet_search" model="ir.ui.view">
+            <field name="name">report time sheet search</field>
+            <field name="model">report.timesheet</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="user_id"/>
+                    <field name="department_id"/>
+                    <filter name="date" string="Date report" date="date"/>
+                    <filter name="today" string="Today"
+                            domain="[('date', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),('date', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]"/>
+                    <filter name="current_month" string="Current Month" domain="[('date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),
+                            ('date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                    <group>
+                        <filter string="Department" name="department_id" context="{'group_by':'department_id'}"/>
+                        <filter string="User" name="user_id" context="{'group_by':'user_id'}"/>
+                        <filter string="Date report " name="groupby_date_report" context="{'group_by':'date'}"/>
+                        <filter string="Date" name="groupby_date" domain="[]" context="{'group_by':'date:day'}" invisible="1"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="report_timesheet_graph_view">
+            <field name="name">report.timesheet.graph</field>
+            <field name="model">report.timesheet</field>
+            <field name="arch" type="xml">
+                <graph string="Report Timesheet">
+                    <field name="department_id"/>
+                    <field name="user_id"/>
+                    <field name="date"/>
+                    <field name="percent_complete" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <record id="report_timesheet_action" model="ir.actions.act_window">
+            <field name="name">Report Timesheet</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">report.timesheet</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'search_default_groupby_date': True,'search_default_current_month':True}</field>
+        </record>
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="report_timesheet_menu" name="## Report Timesheet" parent="hr_timesheet.menu_timesheets_reports" action="report_timesheet_action" sequence="4"/>
+    </data>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="product_product_inherit_form_view" model="ir.ui.view">
+            <field name="name">product.product.inherit.form.view</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <header>
+                    <button id="button_update_variant_inventory_quantity_sales"
+                            name="update_variant_inventory_quantity_sales"
+                            type="object" string="Update Inventory product"
+                            confirm="Are you sure with your choice?"
+                            class="btn-primary"
+                            attrs="{'invisible':['|',('check_product_variant_haravan', '!=', True), ('check_inventory_management', '!=', True)]}"
+                    />
+                </header>
+                <xpath expr="//field[@name='barcode']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="haravan_variant_created_at" readonly="1"/>
+                    <field name="haravan_variant_updated_at" readonly="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="haravan_variant_inventory_quantity"/>
+                    <field name="haravan_variant_image_url"/>
+                    <field name="haravan_variant_vendors"/>
+                    <field name="check_product_variant_haravan"/>
+                    <field name="check_inventory_management"/>
+                </xpath>
+
+                <xpath expr="//field[@name='description']" position="attributes">
+                    <!-- Add your fields or attributes here -->
+                    <attribute name="placeholder">Mô tả đầy đủ, chi tiết về sản phẩm bán để khách hàng dễ dàng nắm bắt
+                        thông tin. Hướng dẫn sử dụng nếu có.
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

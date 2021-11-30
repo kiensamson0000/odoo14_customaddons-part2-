@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--    show up location employee on form view-->
+        <record id="show_up_location" model="ir.ui.view">
+            <field name="name">Location Employees</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='work_location']" position="after">
+                    <field name="employee_location" string="Location" required="1"/>
+                </xpath>
+            </field>
+        </record>
+        <!--    show up location employee on tree view-->
+        <record id="show_up_location_tree_view" model="ir.ui.view">
+            <field name="name">Location Tree</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="employee_location" string="# Location"/>
+                </xpath>
+            </field>
+        </record>
+        <!--        update location employee -->
+        <act_window name="Change Location"
+                    res_model="employee.change.location"
+                    binding_model="hr.employee"
+                    view_mode="form"
+                    id="employee_change_location"
+                    target="new"
+        />
+        <record id="form_change_location_employee" model="ir.ui.view">
+            <field name="name">Change location</field>
+            <field name="model">employee.change.location</field>
+            <field name="arch" type="xml">
+                <form string="Force Location Ex">
+                    <sheet>
+                        <group>
+                            <field name="employee_no"/>
+                            <field name="location_change" required="1"/>
+                        </group>
+                        <footer>
+                            <button name="add_location" type="object"
+                                    string="Update Location" class="oe_highlight"/>
+                            or
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

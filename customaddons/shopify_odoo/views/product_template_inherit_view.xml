@@ -10,6 +10,7 @@
 
                 <xpath expr="//field[@name='barcode']" position="after">
                     <field name="shopify_product_id" invisible="1"/>
+                    <field name="shopify_user_id" invisible="1"/>
                     <field name="shopify_product_type"/>
                 </xpath>
 
@@ -41,12 +42,25 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-
                 <xpath expr="//field[@name='vat']" position="after">
                     <!-- Add your fields or attributes here -->
                     <field name="shopify_customer_id"/>
                     <field name="shopify_shop_id"/>
                     <field name="shopify_discount_ids"/>
+                    <field name="shopify_user_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--        Add Customer Shopify Search in Model Res_Partner-->
+        <record id="res_partner_view_search_shopify" model="ir.ui.view">
+            <field name="name">res.partner.search.shopify</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='type_company']" position="after">
+                    <separator/>
+                   <filter string="Customer Shopify" name="check_customer_shopify" domain="[('shopify_customer_id','!=', False)]"/>
                 </xpath>
             </field>
         </record>
@@ -63,6 +77,7 @@
                     <field name="shopify_payment_method" invisible="1"/>
                     <field name="shopify_transactions_id" invisible="1"/>
                     <field name="shopify_location_id" invisible="1"/>
+                    <field name="shopify_user_id" invisible="1"/>
                 </xpath>
             </field>
         </record>

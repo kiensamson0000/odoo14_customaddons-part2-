@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="project_task_timer_inherit_view" model="ir.ui.view">
+            <field name="name">project task timer</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <field name="is_my_task" invisible="1"/>
+                    <field name="is_user_working" invisible="1"/>
+                    <button name="toggle_start" type="object"
+                            class="oe_stat_button" icon="fa-play-circle" groups="project_task_timer.unlock_start_timer_user"
+                            attrs="{'invisible': ['|',('is_my_task', '=', False),('is_user_working', '=', True)]}">
+                        <field name="task_timer_string" readonly="1"/>
+                    </button>
+                    <button name="toggle_start" type="object"
+                            class="oe_stat_button" icon="fa-stop" groups="project_task_timer.unlock_start_timer_user"
+                            attrs="{'invisible': ['|',('is_my_task', '=', False),('is_user_working', '=', False)]}">
+                        <field name="task_timer_string" readonly="1"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+        <record id="project_task_timer_inherit_view1" model="ir.ui.view">
+            <field name="name">project task timer1</field>
+            <field name="model">project.task</field>
+            <field name="priority" eval="30"/>
+            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='timesheet_ids']/tree/field[@name='unit_amount']" position="before">
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="timer_duration" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='progress']" position="after">
+                    <field name="is_user_working" invisible="1"/>
+                    <field name="is_my_task" invisible="1"/>
+                    <label for="duration" attrs="{'invisible' : [('is_my_task','=',1)]}"/>
+                    <div attrs="{'invisible' : [('is_my_task','=',1)]}">
+                        <button style="pointer-events: none;" class="oe_inline label label-default">
+                            <field name="duration" widget="timesheet_uoms" style="color: black;"/>
+                        </button>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        <!--        update project task kanban-->
+        <record id="project_task_timer_inherit_view_kanban" model="ir.ui.view">
+            <field name="name">project.task.view.inherit.kanban</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="mycontract.project_project_view_kanban_inherit_priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_kanban_bottom_left']/field[@name='priority']" position="after">
+                    <field name="is_user_working" widget="is_user_working"/>
+                </xpath>
+            </field>
+        </record>
+        <!--        lock timesheet-->
+        <record id="project_task_timer_inherit_view_lock_timesheet" model="ir.ui.view">
+            <field name="name">disallow.edit.create.timesheet</field>
+            <field name="model">project.task</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='timesheet_ids']" position="replace">
+                    <field name="timesheet_ids" mode="tree"
+                           attrs="{'invisible': [('analytic_account_active', '=', False)]}"
+                           context="{'default_project_id': project_id, 'default_name':''}">
+                        <tree create="false" edit="false" string="Timesheet Activities" default_order="date">
+                            <field name="date"/>
+                            <field name="user_id" invisible="1"/>
+                            <field name="employee_id" required="1"/>
+                            <field name="name"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="unit_amount" widget="timesheet_uom"/>
+                            <field name="project_id" invisible="1"/>
+                            <field name="testcase_task_type"/>
+                        </tree>
+                        <kanban create="false" edit="false" class="o_kanban_mobile">
+                            <field name="date"/>
+                            <field name="user_id"/>
+                            <field name="employee_id"/>
+                            <field name="name"/>
+                            <field name="unit_amount"/>
+                            <field name="project_id"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <strong>
+                                                    <span>
+                                                        <t t-esc="record.employee_id.value"/>
+                                                    </span>
+                                                </strong>
+                                            </div>
+                                            <div class="col-6 pull-right text-right">
+                                                <strong>
+                                                    <t t-esc="record.date.value"/>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 text-muted">
+                                                <span>
+                                                    <t t-esc="record.name.value"/>
+                                                </span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span class="pull-right text-right">
+                                                    <field name="unit_amount" widget="float_time"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                        <form string="Timesheet Activities">
+                            <sheet>
+                                <group>
+                                    <field name="date" readonly="1"/>
+                                    <field name="user_id" invisible="1"/>
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="name"/>
+                                    <field name="date_start" readonly="1"/>
+                                    <field name="date_end" readonly="1"/>
+                                    <field name="unit_amount" readonly="1" string="Duration" widget="float_time"/>
+                                    <field name="project_id" invisible="1"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+        <record id="project_task_timer_inherit_view_lock_my_timesheet_list" model="ir.ui.view">
+            <field name="name">add.date.from.date.end</field>
+            <field name="model">account.analytic.line</field>
+            <field name="priority" eval="30"/>
+            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree create="false" edit="false" string="Timesheet Activities" import="false">
+                        <field name="date"/>
+                        <field name="name"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="project_id" required="1"/>
+                        <field name="task_id" context="{'default_project_id': project_id}"
+                               domain="[('project_id', '=', project_id)]"/>
+                        <field name="unit_amount" widget="timesheet_uom" sum="Total"/>
+<!--                        <field name="check_time_sheet" invisible="1"/>-->
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+        <!--        lock user on timesheet form-->
+        <record id="project_task_timer_inherit_view_lock_my_timesheet_form" model="ir.ui.view">
+            <field name="name">disallow.edit.create.timesheet</field>
+            <field name="model">account.analytic.line</field>
+            <field name="priority" eval="30"/>
+            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="replace">
+                    <sheet string="Analytic Entry">
+                        <group>
+                            <group>
+                                <field name="date" readonly="1"/>
+                                <field name="project_id" readonly="1" required="1"/>
+                                <field name="task_id" readonly="1"/>
+                                <field name="name"/>
+                                <field name="date_start" readonly="1"/>
+                                <field name="date_end" readonly="1"/>
+                                <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="amount" readonly="1"/>
+                                <field name="unit_amount" readonly="1" widget="timesheet_uom"/>
+                                <field name="currency_id" readonly="1" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </xpath>
+            </field>
+        </record>
+        <!--        un lock user on timesheet form-->
+        <record id="project_task_timer_inherit_view_un_lock_my_timesheet_form" model="ir.ui.view">
+            <field name="name">disallow.edit.create.timesheet</field>
+            <field name="model">account.analytic.line</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_form"/>
+            <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="replace">
+                    <sheet string="Analytic Entry">
+                        <group>
+                            <group>
+                                <field name="date" readonly="1"/>
+                                <field name="project_id" readonly="1" required="1"/>
+                                <field name="task_id" readonly="1"/>
+                                <field name="name"/>
+                                <field name="date_start" readonly="0"/>
+                                <field name="date_end" readonly="0"/>
+                                <field name="team_leader_user_id" string="Team Leader"/>
+                                <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="amount" readonly="1"/>
+                                <field name="unit_amount" widget="timesheet_uom"/>
+                                <field name="currency_id" readonly="1" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </xpath>
+            </field>
+        </record>
+
+        <!--       unlock timesheet-->
+        <record id="project_task_timer_inherit_view_lock_timesheet_manager" model="ir.ui.view">
+            <field name="name">allow.edit.create.timesheet.for.manager</field>
+            <field name="model">project.task</field>
+            <field name="priority" eval="50"/>
+            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+            <field name="groups_id" eval="[(4, ref('unlock_timesheet_user'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='timesheet_ids']" position="replace">
+                    <field name="timesheet_ids" mode="tree"
+                           attrs="{'invisible': [('analytic_account_active', '=', False)]}"
+                           context="{'default_project_id': project_id, 'default_name':''}">
+                        <tree create="true" string="Timesheet Activities" default_order="date">
+                            <field name="date"/>
+                            <field name="user_id" invisible="1"/>
+                            <field name="employee_id" required="1"/>
+                            <field name="name"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="unit_amount" widget="timesheet_uom"/>
+                            <field name="project_id" invisible="1"/>
+                            <field name="testcase_task_type"/>
+                        </tree>
+                        <kanban create="false" edit="false" class="o_kanban_mobile">
+                            <field name="date"/>
+                            <field name="user_id"/>
+                            <field name="employee_id"/>
+                            <field name="name"/>
+                            <field name="unit_amount"/>
+                            <field name="project_id"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <strong>
+                                                    <span>
+                                                        <t t-esc="record.employee_id.value"/>
+                                                    </span>
+                                                </strong>
+                                            </div>
+                                            <div class="col-6 pull-right text-right">
+                                                <strong>
+                                                    <t t-esc="record.date.value"/>
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 text-muted">
+                                                <span>
+                                                    <t t-esc="record.name.value"/>
+                                                </span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span class="pull-right text-right">
+                                                    <field name="unit_amount" widget="float_time"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                        <form string="Timesheet Activities">
+                            <sheet>
+                                <group>
+                                    <field name="date"/>
+                                    <field name="user_id" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="employee_id"/>
+                                    <field name="name"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="unit_amount" string="Duration" widget="float_time"/>
+                                    <field name="project_id" invisible="1"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+<!--        <record id="timesheet_view_tree_user_tree_inherit" model="ir.ui.view">-->
+<!--            <field name="name">timesheet_view_tree_user_tree_inherit</field>-->
+<!--            <field name="model">account.analytic.line</field>-->
+<!--            <field name="inherit_id" ref="hr_timesheet.timesheet_view_tree_user"/>-->
+<!--            <field name="arch" type="xml">-->
+
+<!--                <xpath expr="//field[@name='employee_id']" position="before">-->
+<!--                    &lt;!&ndash; Add new fields here &ndash;&gt;-->
+<!--                    <field name="task_code"/>-->
+<!--                </xpath>-->
+
+<!--            </field>-->
+<!--        </record>-->
+<!--        &lt;!&ndash; Inherit Form View to Modify it &ndash;&gt;-->
+<!--        <record id="hr_timesheet_line_search_inherit" model="ir.ui.view">-->
+<!--            <field name="name">hr_timesheet_line_search_inherit</field>-->
+<!--            <field name="model">account.analytic.line</field>-->
+<!--            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_search"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='employee_id']" position="after">-->
+<!--                    <field string="Task code" name="task_code"/>-->
+<!--                </xpath>-->
+
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        -->
+    <!-- Add Filter timesheet -->
+    <record id="project_task_timer_inherit_view_filter_timesheet_manager" model="ir.ui.view">
+        <field name="name">project.task.timer.inherit.view.filter.timesheet.manager</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='month']" position="after">
+                <filter name="check_time_sheet1" string="### Check Timesheet"
+                        domain="[('check_time_sheet', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</odoo>

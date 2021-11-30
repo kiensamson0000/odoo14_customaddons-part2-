@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_shopify_config_user,shopify.config.user,model_shopify_config_user,base.group_user,1,1,1,1
+access_blog_category,blog.category,model_blog_category,base.group_user,1,1,1,1
+access_blog_tags,blog.tags,model_blog_tags,base.group_user,1,1,1,1

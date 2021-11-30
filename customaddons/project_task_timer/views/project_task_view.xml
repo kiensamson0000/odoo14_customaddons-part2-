@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="time_sheet_notes" model="ir.ui.view">
+        <field name="name">timesheet.wizard.form</field>
+        <field name="model">notes.views</field>
+        <field name="arch" type="xml">
+            <form string="Create Appointment">
+                <sheet>
+                    <center>
+                        <h2 class="text-success">
+                            <strong>
+                                <field name="message_task" readonly="1"/>
+                            </strong>
+                        </h2>
+                    </center>
+                </sheet>
+                <footer>
+                    <button string="Yes" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <!-- Inherit Form View to Modify it -->
+<!--    <record id="project_task_timer_inherit_view_form" model="ir.ui.view">-->
+<!--        <field name="name">project.task.inherit.view.form</field>-->
+<!--        <field name="model">project.task</field>-->
+<!--        <field name="inherit_id" ref="project.view_task_form2"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//notebook/page[4]/field" position="before">-->
+<!--                <group>-->
+<!--                    <field name="testcase_task_type"/>-->
+<!--                </group>-->
+<!--                &lt;!&ndash; Add your fields or attributes here &ndash;&gt;-->
+<!--            </xpath>-->
+
+<!--        </field>-->
+<!--    </record>-->
+</odoo>

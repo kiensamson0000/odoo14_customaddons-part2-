@@ -6,13 +6,17 @@
             <field name="model">s.sp.app</field>
             <field name="arch" type="xml">
                 <form string="Shopify">
+                    <header>
+                        <button name="update_script_tag_shopify" type="object"
+                                string="Update Script Tag" class="oe_highlight"/>
+                        <button name="action_view_config" type="object" string="Data Fetch Shopify" class="oe_highlight"/>
+                    </header>
                     <sheet>
                         <group>
-                            <field name="shop_app_s_apps"/>
-                            <field name="shop_app_s_shops"/>
-                            <field name="token_shop_app"/>
-                            <field name="web_user"/>
-                            <field name="password_user"/>
+                            <field name="shop_app_s_apps" readonly="1"/>
+                            <field name="shop_app_s_shops" readonly="1"/>
+                            <field name="token_shop_app" readonly="1"/>
+                            <field name="web_user" readonly="1"/>
                         </group>
                     </sheet>
                 </form>
@@ -24,11 +28,10 @@
             <field name="model">s.sp.app</field>
             <field name="arch" type="xml">
                 <tree string="Shopify">
-                    <field name="shop_app_s_apps"/>
-                    <field name="shop_app_s_shops"/>
-                    <field name="token_shop_app"/>
-                    <field name="web_user"/>
-                    <field name="password_user"/>
+                    <field name="shop_app_s_apps" readonly="1"/>
+                    <field name="shop_app_s_shops" readonly="1"/>
+                    <field name="token_shop_app" readonly="1"/>
+                    <field name="web_user" readonly="1"/>
                 </tree>
             </field>
         </record>

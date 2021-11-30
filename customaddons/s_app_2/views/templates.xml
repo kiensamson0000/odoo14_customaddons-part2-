@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <template id="home">
+            <ul>
+                <a>
+                    <p>Connect Done</p>
+                    <p>Shop's URL: <t t-esc="url"></t></p>
+                    <p>Name: <t t-esc="name"></t></p>
+                    <p>Email: <t t-esc="email"></t></p>
+                </a>
+            </ul>
+        </template>
+    </data>
+</odoo>

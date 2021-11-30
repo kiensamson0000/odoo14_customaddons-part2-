@@ -8,12 +8,13 @@
                 <form string="Shop Shopify">
                     <sheet>
                         <group>
-                            <field name="shop_base_url"/>
-                            <field name="shop_owner"/>
-                            <field name="shop_user"/>
-                            <field name="shop_password"/>
-                            <field name="shop_currency"/>
-                            <field name="shop_app_ids"/>
+                            <field name="shop_base_url" readonly="1"/>
+                            <field name="shop_owner" readonly="1"/>
+                            <field name="shop_user" readonly="1"/>
+                            <field name="shop_password" readonly="1"/>
+                            <field name="shop_currency" readonly="1"/>
+                            <field name="shop_user_id" force_save="1"/>
+                            <field name="shop_app_ids" readonly="1"/>
                         </group>
                     </sheet>
                 </form>
@@ -25,12 +26,13 @@
             <field name="model">s.shop</field>
             <field name="arch" type="xml">
                 <tree string="Shop Shopify">
-                    <field name="shop_base_url"/>
-                    <field name="shop_owner"/>
-                    <field name="shop_user"/>
-                    <field name="shop_password"/>
-                    <field name="shop_currency"/>
-                    <field name="shop_app_ids" widget="many2many_tags"/>
+                    <field name="shop_base_url" readonly="1"/>
+                    <field name="shop_owner" readonly="1"/>
+                    <field name="shop_user" readonly="1"/>
+                    <field name="shop_password" readonly="1"/>
+                    <field name="shop_currency" readonly="1"/>
+                    <field name="shop_user_id" force_save="1"/>
+                    <field name="shop_app_ids" widget="many2many_tags" readonly="1"/>
                 </tree>
             </field>
         </record>

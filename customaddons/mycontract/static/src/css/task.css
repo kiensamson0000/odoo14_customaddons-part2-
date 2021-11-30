@@ -1,0 +1,49 @@
+.task-priority {
+    padding: 5px;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.task_priority_0 {
+    background-color: #ff4945
+}
+
+.task_priority_1 {
+    background-color: #ff7eb9
+}
+
+.task_priority_2 {
+    background-color: #ef741d
+}
+
+.task_priority_3 {
+    background-color: #339900
+}
+
+.task_priority_4 {
+    background-color: #757575
+}
+
+.oe_kanban_bottom_left span[name^="priority"] {
+    display: none
+}
+
+.task-code span {
+    font-weight: bold;
+    max-width: 175px;
+    word-wrap: break-word;
+    width: 100%;
+    display: block;
+}
+
+.o_kanban_view .o_kanban_record .o_kanban_record_bottom .oe_kanban_bottom_left {
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    height: auto;
+}
+
+.oe_kanban_bottom_left .task-code {
+    clear: both;
+    width: 100%;
+    padding: 6px 0 0 6px;
+}

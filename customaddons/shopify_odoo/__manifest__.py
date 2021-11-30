@@ -19,15 +19,17 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'contacts', 'sale_management', 'product', 'stock', 'account', 'purchase', 'website_sale'],
+    'depends': ['base', 'contacts', 'sale_management', 'product', 'stock', 'account', 'website_sale', 'sale',],
 
     # always loaded
     'data': [
+        'security/shopify_security.xml',
         'security/ir.model.access.csv',
         'views/s_app_view.xml',
         'views/s_shop_view.xml',
         'views/s_sp_app_view.xml',
         'views/s_discount_view.xml',
+        'views/s_fetch_view.xml',
         'views/product_template_inherit_view.xml',
         'views/account_move_inherit_view.xml',
         'views/menu_view.xml',

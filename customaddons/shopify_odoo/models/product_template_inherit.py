@@ -14,6 +14,7 @@ class ProductTemplateInheritShopify(models.Model):
     shopify_product_id = fields.Char(string='Shopify Product ID')
     shopify_product_type = fields.Char()
     check_product_shopify = fields.Boolean()
+    shopify_user_id = fields.Integer()
 
     shopify_discount_id = fields.One2many('s.discount', 'product_discount_shopify', string='Shopify Discount')
     shopify_shop_id = fields.Many2one('s.shop', string='Shopify Shop')
@@ -25,6 +26,7 @@ class ResPartnerInherit(models.Model):
 
     shopify_customer_id = fields.Char(string='Customer ID')
     shopify_shop_id = fields.Many2one('s.shop', string='Shop ID')
+    shopify_user_id = fields.Integer()
 
     shopify_discount_ids = fields.Many2many('s.discount', string='Discount Customer ID')
 
@@ -39,6 +41,7 @@ class SaleOrderInherit(models.Model):
     shopify_transactions_id = fields.Char()
     shopify_location_id = fields.Char()
     shopify_currency = fields.Char()
+    shopify_user_id = fields.Integer()
 
     shopify_sale_order_id = fields.Many2one('account.move')
 

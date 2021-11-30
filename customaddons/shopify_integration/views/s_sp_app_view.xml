@@ -1,0 +1,53 @@
+<odoo>
+  <data>
+
+    <record id="s_sp_app_view_form" model="ir.ui.view">
+        <field name="name">s.sp.app.view.form</field>
+        <field name="model">s.sp.app</field>
+        <field name="arch" type="xml">
+            <form string="_form">
+                <sheet>
+                    <group>
+                        <field name="sp_app"/>
+                        <field name="sp_shop"/>
+                        <field name="token_shop_app"/>
+                        <field name="web_user"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="s_sp_app_view_tree" model="ir.ui.view">
+        <field name="name">s.sp.app.view.tree</field>
+        <field name="model">s.sp.app</field>
+        <field name="arch" type="xml">
+            <tree string="_tree">
+                <field name="sp_app"/>
+                <field name="sp_shop"/>
+                <field name="token_shop_app"/>
+                <field name="web_user"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="s_sp_app_action" model="ir.actions.act_window">
+      <field name="name">Shopify Shop App</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">s.sp.app</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- menu categories -->
+    <menuitem name="Shopify Shop App" id="shopify_integration.menu_3" parent="shopify_integration.menu_root"
+              action="s_sp_app_action"/>
+
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="shopify_integration.menu_1_list" parent="shopify_integration.menu_1"
+              action="shopify_integration.action_window"/>
+    <menuitem name="Server to list" id="shopify_integration" parent="shopify_integration.menu_2"
+              action="shopify_integration.action_server"/>
+-->
+  </data>
+</odoo>

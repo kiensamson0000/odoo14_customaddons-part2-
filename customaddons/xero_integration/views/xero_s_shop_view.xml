@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="xero_s_shop_form_view" model="ir.ui.view">
+            <field name="name">xero.s.shop.form.view</field>
+            <field name="model">xero.s.shop</field>
+            <field name="arch" type="xml">
+                <form string="Shop Xero">
+                    <header>
+                        <button name="xero_refresh_token" type="object"
+                                string="Refresh Token" class="oe_highlight"/>
+                        <button name="sync_xero" type="object"
+                                string="Sync Xero" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="app_name" readonly="1"/>
+                            <field name="id_token" readonly="1"/>
+                            <field name="access_token" readonly="1"/>
+                            <field name="expires_in" readonly="1"/>
+                            <field name="refresh_token" readonly="1"/>
+                            <field name="shop_user_id" force_save="1"/>
+                            <field name="shop_app_ids" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="xero_s_shop_tree_view" model="ir.ui.view">
+            <field name="name">xero.s.shop.tree.view</field>
+            <field name="model">xero.s.shop</field>
+            <field name="arch" type="xml">
+                <tree string="Shop Xero">
+                    <field name="app_name" readonly="1"/>
+                    <field name="id_token" readonly="1"/>
+                    <field name="access_token" readonly="1"/>
+                    <field name="expires_in" readonly="1"/>
+                    <field name="refresh_token" readonly="1"/>
+                    <field name="shop_user_id" force_save="1"/>
+                    <field name="shop_app_ids" widget="many2many_tags" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="xero_s_shop_act_window" model="ir.actions.act_window">
+            <field name="name">Shop Xero</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">xero.s.shop</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click Create to add new Shop.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

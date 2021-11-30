@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="xero_s_app_form_view" model="ir.ui.view">
+            <field name="name">xero.s.app.form.view</field>
+            <field name="model">xero.s.app</field>
+            <field name="arch" type="xml">
+                <form string="App Xero">
+                    <header>
+                        <button name="xero_connect" type="object"
+                                string="Connect Xero" class="oe_highlight"
+                                attrs="{'invisible':[('state','=','connect')]}"/>
+
+                        <button name="xero_disconnect" type="object"
+                                string="Disconnect Xero" class="oe_highlight"
+                                attrs="{'invisible':[('state','=','disconnect')]}"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,connect,disconnect"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <field name="app_name" required="1"/>
+                            <field name="client_id" required="1"/>
+                            <field name="client_secret" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="xero_s_app_tree_view" model="ir.ui.view">
+            <field name="name">xero.s.app.tree.view</field>
+            <field name="model">xero.s.app</field>
+            <field name="arch" type="xml">
+                <tree string="App Xero">
+                    <field name="app_name" required="1"/>
+                    <field name="client_id" required="1"/>
+                    <field name="client_secret" required="1"/>
+                    <field name="state" required="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="xero_s_app_act_window" model="ir.actions.act_window">
+            <field name="name">App Xero</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">xero.s.app</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click Create to add new App.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

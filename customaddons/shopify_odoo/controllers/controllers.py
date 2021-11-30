@@ -11,125 +11,144 @@ import base64
 import re
 from urllib.request import urlopen
 from datetime import *
-
-base_url = "https://odoo.website"
+import calendar
+import time
 
 
 class ShopifyApp(http.Controller):
     @http.route('/shopify/auth/<string:name>', auth='public', type='http', website=True)
     def shopify_auth(self, name=None, **kw):
         search_app = http.request.env['s.app'].sudo().search([('app_name', '=', name)])
-        shopify.Session.setup(api_key=search_app.api_key, secret=search_app.secret_key)
-        shop_url = request.params['shop']
-        callback_url = base_url + "/shopify/finalize/" + name
-        scopes = ['read_products', 'write_products', 'read_product_listings', 'read_orders', 'write_orders',
-                  'read_inventory', 'write_inventory', 'read_customers', 'write_customers',
-                  'read_gift_cards', 'write_gift_cards', 'read_discounts', 'write_discounts']
-        new_session = shopify.Session(shop_url, search_app.api_version)
-        auth_url = new_session.create_permission_url(scopes, callback_url)
-        print(auth_url)
-        return werkzeug.utils.redirect(auth_url)
+        if 'shop' in kw:
+            shop_url = kw['shop']
+            shopify.Session.setup(api_key=search_app.api_key, secret=search_app.secret_key)
+            base_url = "https://odoo.website"
+            new_session = shopify.Session(shop_url, search_app.api_version, kw)
+            scopes = ['read_products', 'write_products', 'read_product_listings', 'read_orders', 'write_orders',
+                      'read_inventory', 'write_inventory', 'read_customers', 'write_customers',
+                      'read_gift_cards', 'write_gift_cards', 'read_discounts', 'write_discounts', 'read_script_tags',
+                      'write_script_tags', 'read_assigned_fulfillment_orders', 'write_assigned_fulfillment_orders']
+            redirect_uri = base_url + "/shopify/finalize/" + name
+            permission_url = new_session.create_permission_url(scopes, redirect_uri)
+            # print(permission_url)
+
+            # return "Hello World............... \n You can close this window now"
+            return werkzeug.utils.redirect(permission_url)
 
     @http.route('/shopify/finalize/<string:name>', auth='public', type='http', website=True)
     def shopify_finalize(self, name=None, **kwargs):
-        request_params = request.params
-        shop_url = request_params['shop']
-        x = shop_url.split('.')
-        shop_name = x[0]
-        result_str = ''.join(random.choice(string.digits) for i in range(10))
-        search_shop = http.request.env['s.shop'].sudo().search([('shop_owner', '=', shop_name)])
         search_app = http.request.env['s.app'].sudo().search([('app_name', '=', name)])
+        if 'shop' in kwargs:
+            shop_url = kwargs['shop']
+            shopify.Session.setup(
+                api_key=search_app.api_key,
+                secret=search_app.secret_key)
+            session = shopify.Session(shop_url, search_app.api_version)
+            access_token = session.request_token(kwargs)
+            #
+            session = shopify.Session(shop_url, search_app.api_version, access_token)
+            shopify.ShopifyResource.activate_session(session)
+            #
+        current_shop = shopify.Shop.current()
+        print(current_shop)
+
+        # request_params = request.params
+        # shop_url = request_params['shop']
+        # x = shop_url.split('.')
+        # shop_name = x[0]
+        result_str = ''.join(random.choice(string.digits) for i in range(10))
+        search_shop = http.request.env['s.shop'].sudo().search([('shop_base_url', '=', current_shop.domain)])
+        search_app = http.request.env['s.app'].sudo().search([('app_name', '=', name)])
+        # todo: create s_shop
+        shop_information = {
+                'shop_base_url': current_shop.domain,
+                'shop_owner': current_shop.domain,
+                'shop_user': current_shop.domain,
+                'shop_currency': current_shop.currency,
+                'shop_password': result_str,
+                'shop_app_ids': [(4, search_app.id)]
+        }
         if search_shop:
-            search_shop.sudo().write({
-                'shop_base_url': shop_url,
-                'shop_owner': shop_name,
-                'shop_user': shop_url,
-                'shop_password': result_str,
-                'shop_app_ids': [(4, search_app.id)]
-            })
+            search_shop.sudo().write(shop_information)
         else:
-            request.env['s.shop'].sudo().create({
-                'shop_base_url': shop_url,
-                'shop_owner': shop_name,
-                'shop_user': shop_url,
-                'shop_password': result_str,
-                'shop_app_ids': [(4, search_app.id)]
-            })
-        search_user = request.env['res.users'].sudo().search([('login', '=', shop_url)])
+            request.env['s.shop'].sudo().create(shop_information)
+
+        # todo: create s_sp_app
+        search_shop_app = request.env['s.sp.app'].sudo().search([('web_user', '=', current_shop.domain)])
+        # note: search vs 'web_user' hay token_shop_app
+        s_sp_app_information = {
+            'shop_app_s_apps': search_app.id,
+            'shop_app_s_shops': search_shop.id,
+            'token_shop_app': access_token,
+            'web_user': current_shop.domain,
+        }
+        if search_shop_app:
+            search_shop_app.sudo().write(s_sp_app_information)
+        else:
+            request.env['s.sp.app'].sudo().create(s_sp_app_information)
+
+        # todo: create USER in 'res.partner'
+        search_user = request.env['res.users'].sudo().search([('login', '=', current_shop.domain)])
+        user_vals = {
+            'name': current_shop.domain,
+            'login': current_shop.domain,
+            'password': str(result_str),
+            'active': 'true'
+        }
         if search_user:
-            search_user.sudo().write({
-                'name': shop_name,
-                'login': shop_url,
-                'password': str(result_str)
-            })
+            search_user.sudo().write(user_vals)
         else:
-            request.env['res.users'].sudo().create({
-                'name': shop_name,
-                'login': shop_url,
-                'password': str(result_str)
-            })
-        #   Login in Odoo
-        current_shop = request.env['s.shop'].sudo().search([('shop_owner', '=', shop_name)])
+            request.env['res.users'].sudo().create(user_vals)
+
+        # todo: Login in Odoo
+        existed_shop = request.env['s.shop'].sudo().search([('shop_owner', '=', current_shop.domain)])
         db = http.request.env.cr.dbname
         request.env.cr.commit()
-        uid = request.session.authenticate(db, current_shop.shop_user, current_shop.shop_password)
-        print(result_str)
-        print(uid)
-        session = shopify.Session(shop_url, search_app.api_version)
-        access_token = session.request_token(request_params)
-        search_shop_app = request.env['s.sp.app'].sudo().search([('token_shop_app', '=', access_token)])
-        if search_shop_app:
-            search_shop_app.sudo().write({
-                'web_user': shop_url,
-                'password_user': '1',
-                'shop_app_s_apps': search_app.id,
-                'shop_app_s_shops': search_shop.id
-            })
-        else:
-            request.env['s.sp.app'].sudo().create({
-                'token_shop_app': access_token,
-                'web_user': shop_url,
-                'password_user': '1',
-                'shop_app_s_apps': search_app.id,
-                'shop_app_s_shops': search_shop.id
-            })
-        session = shopify.Session(shop_url, search_app.api_version, access_token)
-        shopify.ShopifyResource.activate_session(session)
+        uid = request.session.authenticate(db, existed_shop.shop_user, existed_shop.shop_password)
+        # print(result_str)
+        # print(uid)
 
         # todo: create shop in 'res.partner'
-        current_shop = shopify.Shop.current()
-        search_partner = request.env['res.partner'].search([('email', '=', current_shop.customer_email)])
+        search_partner = request.env['res.partner'].sudo().search([('email', '=', current_shop.customer_email)])
+        shop_vals = {
+            'company_type': 'company',
+            'name': current_shop.name,
+            'street': current_shop.address1,
+            'street2': current_shop.address2 if current_shop.address2 else None,
+            'city': current_shop.city,
+            'zip': current_shop.zip,
+            'email': current_shop.customer_email,
+            'website': current_shop.domain,
+            'shopify_user_id': uid,
+            'shopify_shop_id': request.env['s.shop'].search([("shop_base_url", "=", current_shop.domain)]).id
+        }
         if not search_partner:
-            partner_id = request.env['res.partner'].sudo().create({
-                'company_type': 'company',
-                'name': current_shop.name,
-                'street': current_shop.address1,
-                'street2': current_shop.address2 if current_shop.address2 else None,
-                'city': current_shop.city,
-                'zip': current_shop.zip,
-                'email': current_shop.customer_email,
-                'website': current_shop.domain,
-                'shopify_shop_id': request.env['s.shop'].search([("shop_base_url", "=", current_shop.domain)]).id
-            })
-            print(partner_id)
+            request.env['res.partner'].sudo().create(shop_vals)
+        else:
+            search_partner.sudo().write(shop_vals)
 
-        #   Update Shop Currency
-        search_shop.write({'shop_currency': current_shop.currency})
+        # add 'partner_id' for USER
+        search_user.sudo().write({'partner_id': request.env['res.partner'].sudo().search([('email', '=', current_shop.customer_email)]).id})
 
-        #   Active Shop Currency Un Module Core
-        active_currency = request.env['res.currency'].search([("name", "=", current_shop.currency), ("active", "=", True)])
+
+        # Active Shop Currency Un Module Core
+        active_currency = request.env['res.currency'].search(
+            [("name", "=", current_shop.currency), ("active", "=", True)])
         if not active_currency:
+            # why loop 1 lan nua
             active_currency_1 = request.env['res.currency'].search(
                 [("name", "=", current_shop.currency), ("active", "=", False)])
             if active_currency_1:
                 active_currency_1.active = True
 
-        #   Update Email Shop Account
-        # search_account = request.env['res.users'].sudo().search([('id', '=', request.env.user.id)])
-        # if not search_account.email:
-        #     search_account.write({'email': current_shop.customer_email})
-        # else:
-        #     search_account.write({'email': current_shop.customer_email})
+        # Update Email Shop Account
+        search_account = request.env['res.users'].sudo().search([('id', '=', request.env.user.id)])
+        commission_group = request.env.ref('shopify_odoo.group_shopify_admin')
+        commission_group.sudo().write({'users': [(4, search_account.id)]})
+        if not search_account.email:
+            search_account.sudo().write({'email': current_shop.customer_email})
+        else:
+            search_account.sudo().write({'email': current_shop.customer_email})
 
         # todo: create customer in 'res.partner'
         website = 'https://' + current_shop.domain
@@ -138,13 +157,14 @@ class ShopifyApp(http.Controller):
             list_customer = request.env['res.partner'].search([("shopify_customer_id", "=", customer.id)])
             if not list_customer:
                 customer_name = customer.first_name + ' ' + customer.last_name
-                request.env['res.partner'].create({
+                request.env['res.partner'].sudo().create({
                     'shopify_customer_id': customer.id,
                     'company_type': 'person',
                     'name': customer_name,
                     'parent_id': request.env['res.partner'].search([("website", "=", website)]).id,
                     'phone': customer.phone,
                     'email': customer.email,
+                    'shopify_user_id': uid,
                     'shopify_shop_id': request.env['s.shop'].search([("shop_base_url", "=", current_shop.domain)]).id
                 })
 
@@ -154,9 +174,10 @@ class ShopifyApp(http.Controller):
             for pro_val in product.variants:
                 product_vals = {
                     'shopify_product_id': pro_val.id,
-                    'name': str(product.title) + " " + str(pro_val.title),
+                    'name': str(product.title) + " " + str(pro_val.title) if len(product.variants) > 1 else str(
+                        product.title),
                     'lst_price': pro_val.price,
-                    'description': re.sub(r'<.*?>', '', product.body_html),
+                    'description': re.sub(r'<.*?>', '', product.body_html) if product.body_html else None,
                     'shopify_product_type': product.product_type,
                     'default_code': pro_val.sku if pro_val.sku else None,
                     'barcode': pro_val.barcode if pro_val.barcode else None,
@@ -167,26 +188,30 @@ class ShopifyApp(http.Controller):
                     'taxes_id': None,
                     'is_published': True,
                     'categ_id': 1,
-                    'image_1920': base64.b64encode(urlopen(product.images[0].src).read()),
+                    'shopify_user_id': uid,
+                    'image_1920': base64.b64encode(urlopen(product.images[0].src).read()) if product.images else None,
                     'shopify_shop_id': request.env['s.shop'].search([("shop_base_url", "=", current_shop.domain)]).id
                 }
-                existed_product = request.env["product.template"].sudo().search([('shopify_product_id', '=', product.id)],
-                                                                                limit=1)
+                existed_product = request.env["product.template"].sudo().search(
+                    [('shopify_product_id', '=', pro_val.id)],
+                    limit=1)
                 if not existed_product:
                     request.env['product.template'].sudo().create(product_vals)
                 else:
-                    existed_product.write(product_vals)
+                    existed_product.sudo().write(product_vals)
 
         # todo: create order in 'sale.order'
         list_order = shopify.Order.find()
         list_order_product = []
+
         for order in list_order:
             # todo: Search and Link or Create Customer in Odoo
             if 'customer' not in order.attributes:
                 search_customer = request.env['res.partner'].sudo().search(
                     [('name', '=', order.shipping_address.name), ('phone', '=', order.shipping_address.phone)])
                 if not search_customer:
-                    request.env['res.partner'].create({
+                    request.env['res.partner'].sudo().create({
+                        'shopify_user_id': uid,
                         'company_type': 'person',
                         'name': order.shipping_address.name,
                         'phone': order.shipping_address.phone,
@@ -199,14 +224,27 @@ class ShopifyApp(http.Controller):
             link_partner = request.env['res.partner'].sudo().search(
                 [('name', '=', order.shipping_address.name), ('phone', '=', order.shipping_address.phone)], limit=1)
             transaction_id = shopify.Transaction.find(order_id=order.id)
+            if len(transaction_id) > 0:
+                if 'id' in transaction_id[0].attributes:
+                    transaction = str(transaction_id[0].id)
+                else:
+                    transaction = None
+            else:
+                transaction = None
+            # check fulfillments
+            if len(order.fulfillments) > 0:
+                  shopify_location = str(order.fulfillments[0].attributes['location_id'])
+            else:
+                  shopify_location = None
             order_vals = {
                 'shopify_order_id': order.id,
                 'name': order.id,
                 'shopify_payment_method': order.gateway,
                 'shopify_currency': order.currency,
-                'shopify_transactions_id': str(transaction_id[0].id) if 'id' in transaction_id[0].attributes else None,
-                'shopify_location_id': str(order.location_id) if order.location_id else str(order.fulfillments[0].location_id),
+                'shopify_transactions_id': transaction,
+                'shopify_location_id': str(order.location_id) if order.location_id else shopify_location,
                 'state': 'draft',
+                'shopify_user_id': uid,
                 'date_order': datetime.strptime(time_order, '%Y-%m-%d %H:%M:%S'),
                 'partner_id': link_partner.id if 'customer' not in order.attributes else request.env[
                     'res.partner'].sudo().search([('shopify_customer_id', '=', order.customer.id)]).id
@@ -231,14 +269,18 @@ class ShopifyApp(http.Controller):
                                         if search_tax:
                                             list_tax.append(search_tax.id)
                                         else:
-                                            request.env['account.tax'].create({
+                                            request.env['account.tax'].sudo().create({
                                                 'amount': float(product_tax.rate * 100),
                                                 'amount_type': 'percent',
                                                 'type_tax_use': 'sale',
                                                 'name': 'Tax ' + str(product_tax.rate * 100) + ' %',
                                                 'active': True
                                             })
-                                            list_tax.append(search_tax.id)
+                                            search_tax_1 = request.env['account.tax'].sudo().search(
+                                                [('amount', '=', float(product_tax.rate * 100)),
+                                                 ('amount_type', '=', 'percent'), ('type_tax_use', '=', 'sale')],
+                                                limit=1)
+                                            list_tax.append(search_tax_1.id)
                                 existing_products = request.env['product.template'].sudo().search(
                                     [('shopify_product_id', '=', order_product.variant_id)], limit=1)
                                 if existing_products:
@@ -271,4 +313,25 @@ class ShopifyApp(http.Controller):
         password_login = request.env['s.shop'].search([('shop_base_url', '=', current_shop.domain)])
         print(password_login.shop_password)
 
+        # todo: insert script theme
+        # script_src = search_app.link_script_tag
+        # existedScriptTags = shopify.ScriptTag.find(src=script_src)
+        # print(shopify.ScriptTag.find())
+        # if not existedScriptTags:
+        #     shopify.ScriptTag.create({
+        #         "event": "onload",
+        #         "src": script_src
+        #     })
+        #
+        #
+        # request.env['create.webhook.shopify'].sudo().create_product_shopify(uid)
+        # request.env['create.webhook.shopify'].sudo().create_order_shopify(uid)
+        # request.env['create.webhook.shopify'].sudo().update_product_shopify(uid)
+        # request.env['create.webhook.shopify'].sudo().update_order_shopify(uid)
+
+        print(shopify.ScriptTag.find())
+        print(shopify.Webhook.find())
+
         return werkzeug.utils.redirect('https://odoo.website/web#cids=1&home=')
+
+

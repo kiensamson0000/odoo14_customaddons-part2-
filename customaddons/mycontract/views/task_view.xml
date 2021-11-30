@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="assets_backend" name="taskpriority assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/mycontract/static/src/css/task.css"/>
+        </xpath>
+    </template>
+    <!-- To-Do Task Form view -->
+    <record id="view_task_form_add_priority" model="ir.ui.view">
+        <field name="name">Add Priority</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <field name="project_id" position="after">
+                <field name="priority"/>
+                <field name="code" class="oe_read_only"/>
+                <!--<field name="completed"/>-->
+                <!--<field name="missed_deadline_search" class="oe_read_only"/>-->
+            </field>
+
+        </field>
+    </record>
+
+    <record id="project_project_view_kanban_inherit_priority" model="ir.ui.view">
+        <field name="name">project.project.kanban.inherit.priority</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+
+            <div class="oe_kanban_bottom_left" position="inside">
+                <div t-attf-class="task_priority_#{record.priority.raw_value} task-priority">
+                    <field name="priority"/>
+                </div>
+                <!--<div class="miss_deadline">-->
+                <!--<field name="completed" />-->
+                <!--</div>-->
+
+                <br/>
+                <div class="task-code">
+                    <field name="code" class="task-code-kanban" required="True"/>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!--Kanban task create-->
+    <record id="quick_create_inherited_for_priority" model="ir.ui.view">
+        <field name="name">project.task.kanban.inherit.priority</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.quick_create_task_form"/>
+        <field name="arch" type="xml">
+
+            <field name="user_id" position="after">
+                <field name="priority"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!--<record id="search_sale_order_ept" model="ir.ui.view">-->
+    <!--<field name="name">search_missed_deadline_task</field>-->
+    <!--<field name="model">project.task</field>-->
+    <!--<field name="type">search</field>-->
+    <!--<field name="inherit_id" ref="project.view_task_search_form"/>-->
+    <!--<field name="arch" type="xml">-->
+    <!--<filter name="my_followed_tasks" position="before">-->
+    <!--<filter  string="Missed Deadline" domain="[('completed','=','0'),('date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]" help="Missed Deadline" name='filter_missed_deadline'/>-->
+    <!--</filter>-->
+    <!--</field>-->
+
+    <!--</record>-->
+
+</odoo>

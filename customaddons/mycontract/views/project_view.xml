@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Project Form view -->
+    <record id="view_project_form_add_code" model="ir.ui.view">
+        <field name="name">Add Project Code</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="code" string="Project Code" required="True"/>
+                <!--<field name="run_completed_process" string="Run complete Aggregate"/>-->
+            </field>
+
+        </field>
+    </record>
+    <!-- Project Task kanban view -->
+    <record id="additional_view_task_search_form_task_code" model="ir.ui.view">
+        <field name="name">project.task.search.form.task_code</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="code"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="project_project_view_form_simplified_custom_privacy" model="ir.ui.view">
+        <field name="name">project_project_view_form_simplified_custom_privacy</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="code" required="True"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

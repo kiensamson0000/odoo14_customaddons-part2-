@@ -3,3 +3,6 @@ access_s_app,s_app,model_s_app,,1,1,1,1
 access_s_shop,s_shop,model_s_shop,,1,1,1,1
 access_s_sp_app,s_sp_app,model_s_sp_app,,1,1,1,1
 access_s_discount,s_discount,model_s_discount,,1,1,1,1
+access_s_fetch,s_fetch,model_s_fetch,,1,1,1,1
+access_order_fetch_shopify_log,order_fetch_shopify_log,model_order_fetch_shopify_log,,1,1,1,1
+access_product_fetch_shopify_log,product_fetch_shopify_log,model_product_fetch_shopify_log,,1,1,1,1

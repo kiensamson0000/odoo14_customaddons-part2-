@@ -1,0 +1,52 @@
+<odoo>
+  <data>
+    <record id="s_app_view_form" model="ir.ui.view">
+        <field name="name">s.app.view.form</field>
+        <field name="model">s.app</field>
+        <field name="arch" type="xml">
+            <form string="_form">
+                <sheet>
+                    <group>
+                      <group>
+                        <field name="s_api_key"/>
+                        <field name="s_secret_key"/>
+                      </group>
+                      <group>
+                        <field name="s_api_version"/>
+                        <field name="s_app_name"/>
+                      </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="s_app_view_tree" model="ir.ui.view">
+        <field name="name">s.app.view.tree</field>
+        <field name="model">s.app</field>
+        <field name="arch" type="xml">
+            <tree string="_tree">
+                <field name="s_api_key"/>
+                <field name="s_secret_key"/>
+                <field name="s_api_version"/>
+                <field name="s_app_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="s_app_action" model="ir.actions.act_window">
+      <field name="name">Shopify App</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">s.app</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Top menu item -->
+    <menuitem name="Shopify integration" id="shopify_integration.menu_root" action="s_app_action"
+              web_icon="shopify_integration,static/description/icon.png"/>
+
+    <!-- menu actions -->
+    <menuitem name="Shopify App" id="shopify_integration.menu_1" parent="shopify_integration.menu_root"
+              action="s_app_action"/>
+  </data>
+</odoo>

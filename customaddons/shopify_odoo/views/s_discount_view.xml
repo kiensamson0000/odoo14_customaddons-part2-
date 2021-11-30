@@ -13,20 +13,34 @@
                             <field name="decrease_price" widget='monetary' options="{'currency_field': 'currency_id'}"/>
                             <field name="valid_date_from" required="1"/>
                             <field name="valid_date_to" required="1"/>
+                            <field name="shop_user_id" invisible="0" force_save="1" readonly="1"/>
                         </group>
                         <notebook>
                             <page name="discount_customer" string="Customers">
                                 <button class="oe_highlight" name="get_customer_shopify" string="Get Customers"
                                         type="object"/>
                                 <group>
-                                    <field name="res_partner_discount_shopify" nolabel="1"/>
+                                    <field name="res_partner_discount_shopify" nolabel="1" options="{'no_create': True}"/>
                                 </group>
                             </page>
                             <page name="discount_product" string="Products">
                                 <button class="oe_highlight" name="get_product_shopify" string="Get Products"
                                         type="object"/>
                                 <group>
-                                    <field name="product_discount_shopify" nolabel="1"/>
+                                    <field name="product_discount_shopify" nolabel="1" options="{'no_create': True}">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="list_price"/>
+                                        </tree>
+                                        <form>
+                                            <group>
+                                                <group>
+                                                    <field name="name"/>
+                                                    <field name="list_price"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                    </field>
                                 </group>
                             </page>
                         </notebook>
@@ -45,6 +59,7 @@
                     <field name="decrease_price" widget='monetary' options="{'currency_field': 'currency_id'}"/>
                     <field name="valid_date_from" required="1"/>
                     <field name="valid_date_to" required="1"/>
+                    <field name="shop_user_id" invisible="0" force_save="1"/>
                 </tree>
             </field>
         </record>
@@ -116,6 +131,12 @@
                 </p>
             </field>
         </record>
+
+        <template id="shopify_assets_frontend" inherit_id="web.assets_frontend" name="Shopify Assets">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/shopify_odoo/static/src/js/main.js"></script>
+            </xpath>
+        </template>
 
     </data>
 </odoo>

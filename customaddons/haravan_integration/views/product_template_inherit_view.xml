@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="product_template_inherit_form_view" model="ir.ui.view">
+            <field name="name">product.template.inherit.form.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <header>
+                    <button name="create_products_sales" string="Create Haravan Products" class="oe_highlight"
+                            type="object"
+                            confirm="Are you sure with your choice?"
+                            attrs="{'invisible':[('check_product_haravan', '=', True)]}"/>
+                    <button name="update_products_haravan_sales" string="Update Haravan Products" class="oe_highlight"
+                            type="object"
+                            confirm="Are you sure with your choice?"
+                            attrs="{'invisible':[('check_product_haravan', '=', False)]}"/>
+                    <button name="delete_products_haravan_sales" string="Delete Haravan Products" class="oe_highlight"
+                            type="object"
+                            confirm="Are you sure with your choice?"
+                            attrs="{'invisible':[('check_product_haravan', '=', False)]}"/>
+                </header>
+
+                <!-- Product ID(haravan_product_id) = Internal Reference(default_code) -->
+<!--                <xpath expr="//field[@name='type']" position="before">-->
+<!--                    &lt;!&ndash; Add your fields or attributes here &ndash;&gt;-->
+<!--                    <field name="haravan_product_id" readonly="1"/>-->
+<!--                </xpath>-->
+
+                <xpath expr="//field[@name='barcode']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="haravan_tags"/>
+                    <field name="haravan_created_at" readonly="1"/>
+                    <field name="haravan_updated_at" readonly="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="haravan_vendors"/>
+                    <field name="haravan_image_url"/>
+                    <field name="check_product_haravan"/>
+                </xpath>
+
+                <xpath expr="//field[@name='description']" position="attributes">
+                    <!-- Add your fields or attributes here -->
+                    <attribute name="placeholder">Mô tả đầy đủ, chi tiết về sản phẩm bán để khách hàng dễ dàng nắm bắt thông tin. Hướng dẫn sử dụng nếu có.
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Add Filter Search Product Haravan In Product Template-->
+        <record id="product_template_search_haravan_product" model="ir.ui.view">
+            <field name="name">product.template.search.haravan.product</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <filter name="haravan_product_id" string="### Haravan Product"
+                            domain="[('haravan_product_id', '!=', False)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Don't create Filter for Category because api "category" only have product_name -> can't phân biệt -->
+
+        <!-- Add Filter Search Category Product Haravan In Product Template-->
+        <!--        <record id="product_categories_search_haravan_product" model="ir.ui.view">-->
+        <!--            <field name="name">product.categories.search.haravan.product</field>-->
+        <!--            <field name="model">product.template</field>-->
+        <!--            <field name="inherit_id" ref="product.product_category_search_view"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//field[@name='parent_id']" position="after">-->
+        <!--                    &lt;!&ndash; Add your fields or attributes here &ndash;&gt;-->
+        <!--                    <filter name="haravan_product_cate" string="Haravan Product Category"-->
+        <!--                            domain="[('', '=', '')]"/>-->
+        <!--                </xpath>-->
+        <!--            </field>-->
+        <!--        </record>-->
+    </data>
+</odoo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="s_discount_program_view_tree" model="ir.ui.view">
+        <field name="name">s.discount.program.view.tree</field>
+        <field name="model">s.discount.program</field>
+        <field name="arch" type="xml">
+            <tree string="Discount Program">
+                <field name="name"/>
+<!--                 groups="shopify_app.group_current_shop"-->
+                <field name="shop_id" widget="many2one"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="s_discount_program_view_form" model="ir.ui.view">
+        <field name="name">s.discount.program.view.form</field>
+        <field name="model">s.discount.program</field>
+        <field name="arch" type="xml">
+            <form string="Discount Program">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="shop_id" widget="many2one"/>
+                    </group>
+                    <notebook>
+                        <page string="Customer">
+                            <button name="creat_customer" class="btn-primary" type="object" string="Pull Customesr">
+                            </button>
+                            <field name="customer_ids">
+                                <tree string="Customer" editable="bottom">
+                                    <field name="customer_id"/>
+                                    <field name="email"/>
+                                    <field name="check_person" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Product">
+                            <button name="create_product" class="btn-primary" type="object" string="Pull Products">
+                            </button>
+                            <field name="product_ids">
+                                <tree string="Product" editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="price"/>
+                                    <field name="discount_amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="s_discount_program_action" model="ir.actions.act_window">
+        <field name="name">Discount Program</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">s.discount.program</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>
+                Create new discount
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="discount_program" parent="shopify_integration.menu_root" action="s_discount_program_action"/>
+
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="unlock_timesheet_user" model="res.groups">
+        <field name="name">111. Unlock Time Sheet</field>
+        <field name="comment">The user will have access to the timesheet.</field>
+    </record>
+    <record id="unlock_start_timer_user" model="res.groups">
+        <field name="name">111. Unlock Start Timer</field>
+        <field name="comment">The user will have access to the timer.</field>
+    </record>
+</odoo>

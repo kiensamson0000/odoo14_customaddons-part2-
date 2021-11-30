@@ -1,0 +1,29 @@
+.test{
+    background-color: yellow;
+}
+
+.content1{
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    display: inline;
+}
+
+.content2{
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    font-size: 20px;
+}
+
+.img1 {
+    padding-top: 30px;
+    padding-left: 15px;
+    float: left;
+}
+
+.content1 .div1{
+    padding-top: 170px;
+    height: 50px;
+}

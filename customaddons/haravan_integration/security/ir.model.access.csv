@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_haravan_companies,access_haravan_companies,model_haravan_companies,,1,1,1,1
+access_haravan_vendors,access_haravan_vendors,model_haravan_vendors,,1,1,1,1
+access_haravan_collections,access_haravan_collections,model_haravan_collections,,1,1,1,1
+access_haravan_seller,access_haravan_seller,model_haravan_seller,,1,1,1,1
+access_update_order_state,access_update_order_state,model_update_order_state,,1,1,1,1
+

@@ -40,8 +40,7 @@ class AccountMoveInherit(models.Model):
 
                     payload = json.dumps({
                         "refund": {
-                            # "currency": self.currency_id.name,
-                            "currency": 'VND',
+                            "currency": search_shop.shop_currency,
                             "notify": True,
                             "note": "Refund Order",
                             "shipping": {

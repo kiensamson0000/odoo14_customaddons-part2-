@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_xero_odoo_root"
+              name="Xero-Odoo Connector"
+              sequence="10"
+              action="xero_s_app_act_window"
+              web_icon="xero_integration,static/description/icon.png"/>
+
+    <menuitem name="App Xero"
+              id="app_xero_menu"
+              parent="xero_integration.menu_xero_odoo_root"
+              action="xero_s_app_act_window"
+              sequence="10"/>
+
+    <menuitem name="Shop Xero"
+              id="shop_xero_menu"
+              parent="xero_integration.menu_xero_odoo_root"
+              action="xero_s_shop_act_window"
+              sequence="20"/>
+
+    <menuitem name="Xero "
+              id="xero_menu"
+              parent="xero_integration.menu_xero_odoo_root"
+              action="xero_s_sp_app_act_window"
+              sequence="30"/>
+
+<!--    <menuitem name="App Xero"-->
+<!--              id="app_xero_menu1"-->
+<!--              parent="shopify_odoo.menu_shopify_odoo_root"-->
+<!--              action="xero_s_app_act_window"-->
+<!--              sequence="35"/>-->
+
+<!--    <menuitem name="Shop Xero"-->
+<!--              id="shop_xero_menu1"-->
+<!--              parent="shopify_odoo.menu_shopify_odoo_root"-->
+<!--              action="xero_s_shop_act_window"-->
+<!--              sequence="36"/>-->
+
+
+<!--    <menuitem name="Discount Xero"-->
+<!--              id="discount_xero_menu"-->
+<!--              parent="xero_integration.menu_xero_odoo_root"-->
+<!--              action="s_discount_act_window"-->
+<!--              sequence="40"/>-->
+
+</odoo>

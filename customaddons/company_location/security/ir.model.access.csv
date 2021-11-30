@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_company_location,access_company_location,model_company_location,base.group_user,1,0,0,0
+access_company_location_admin,access_company_location_admin,model_company_location,base.group_system,1,1,1,1
+access_employee_location,access_employee_location,model_employee_change_location,,1,1,1,1

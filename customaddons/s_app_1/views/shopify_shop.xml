@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="shopify_shop_app_view_tree" model="ir.ui.view">
+        <field name="name">shopify.shop.app.tree</field>
+        <field name="model">shopify.shop.app</field>
+        <field name="arch" type="xml">
+            <tree string="Shop of App">
+                <field name="shop"/>
+                <field name="app"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="shopify_shop_app_action" model="ir.actions.act_window">
+        <field name="name">Shop of App</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shopify.shop.app</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p>
+                Create new item
+            </p>
+        </field>
+    </record>
+
+    <record id="shopify_shop_view_tree" model="ir.ui.view">
+        <field name="name">shopify.shop.tree</field>
+        <field name="model">shopify.shop</field>
+        <field name="arch" type="xml">
+            <tree string="Shop">
+                <field name="base_url"/>
+                <field name="shop_owner"/>
+                <field name="shop_currency"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="shopify_shop_view_form" model="ir.ui.view">
+        <field name="name">shopify.shop.form</field>
+        <field name="model">shopify.shop</field>
+        <field name="arch" type="xml">
+            <form string="Shop">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="base_url"/>
+                            <field name="shop_owner"/>
+                        </group>
+                        <group>
+                            <field name="shop_currency"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="shopify_shop_action" model="ir.actions.act_window">
+        <field name="name">Shop</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">shopify.shop</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>
+                Create new item
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="shopify_shop" parent="shop_app_root" action="shopify_shop_action"/>
+    <menuitem id="shopify_shop_app" parent="shop_app_root" action="shopify_shop_app_action"/>
+
+</odoo>

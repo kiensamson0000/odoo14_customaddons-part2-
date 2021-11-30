@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="haravan_seller_view_form" model="ir.ui.view">
+            <field name="name">haravan.seller.view.form</field>
+            <field name="model">haravan.seller</field>
+            <field name="arch" type="xml">
+                <form string="Haravan Seller" create="false" delete="false">
+                    <sheet>
+                        <group>
+                            <field name="code" required="True"/>
+                            <field name="client_id" required="True"/>
+                            <field name="client_secret" required="True"/>
+                            <field name="grant_type" required="True"/>
+                            <field name="redirect_uri" required="True"/>
+                            <field name="token_connect"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="get_token_haravan" string="Connect" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="haravan_seller_view_tree" model="ir.ui.view">
+            <field name="name">haravan.seller.view.tree</field>
+            <field name="model">haravan.seller</field>
+            <field name="arch" type="xml">
+                <tree string="haravan_seller_tree" create="false" delete="false" sample="1">
+                    <field name="code"/>
+                    <field name="client_id"/>
+                    <field name="client_secret"/>
+                    <field name="grant_type"/>
+                    <field name="redirect_uri"/>
+                    <field name="token_connect"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="haravan_seller_act_window" model="ir.actions.server">
+            <field name="name">Haravan Seller</field>
+            <field name="model_id" ref="haravan_integration.model_haravan_seller"/>
+            <field name="binding_model_id" ref="haravan_integration.model_haravan_seller"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">action = model.action_view_config()</field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="haravan_seller_menu" name="### Haravan Seller"
+                  parent="sale.menu_sale_config" action="haravan_seller_act_window"
+                  sequence="30"
+                  groups="base.group_no_one"/>
+    </data>
+</odoo>

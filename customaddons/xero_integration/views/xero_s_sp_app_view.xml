@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="xero_s_sp_app_form_view" model="ir.ui.view">
+            <field name="name">xero.s.sp.app.form.view</field>
+            <field name="model">xero.s.sp.app</field>
+            <field name="arch" type="xml">
+                <form string="Xero">
+                    <header>
+                        <!--  <button name="update_script_tag_shopify" type="object"-->
+                        <!--          string="Update Script Tag" class="oe_highlight"/>-->
+                        <!-- <button name="action_view_config" type="object" string="Data Fetch Shopify" class="oe_highlight"/>-->
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="shop_app_s_apps" readonly="1"/>
+                            <field name="shop_app_s_shops" readonly="1"/>
+                            <field name="token_shop_app" readonly="1"/>
+                            <field name="web_user" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="xero_s_sp_app_tree_view" model="ir.ui.view">
+            <field name="name">xero.s.sp.app.tree.view</field>
+            <field name="model">xero.s.sp.app</field>
+            <field name="arch" type="xml">
+                <tree string="Xero">
+                    <field name="shop_app_s_apps" readonly="1"/>
+                    <field name="shop_app_s_shops" readonly="1"/>
+                    <field name="token_shop_app" readonly="1"/>
+                    <field name="web_user" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="xero_s_sp_app_act_window" model="ir.actions.act_window">
+            <field name="name">Save Shop Xero</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">xero.s.sp.app</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click Create to add new Xero.
+                </p>
+            </field>
+        </record>
+        <template id="assets_backend_xero_js" name="xero">
+            <script type="text/javascript" src="/xero_integration/static/src/js/webpack_xero.js"></script>
+        </template>
+        <template id="xero_main" name="References">
+            <div id="xero_main_render"/>
+            <script>
+<!--                window.afConfig = {-->
+<!--                  "sale_account": <t t-raw="sale_account"/>-->
+<!--                }-->
+            </script>
+            <t t-call-assets="xero_integration.assets_backend_xero_js"/>
+        </template>
+    </data>
+</odoo>
